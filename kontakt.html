@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kontakt</title>
+  <link rel="stylesheet" href="./CSS/style.css">
+</head>
+
+<body class="contact-page">
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">Min portefølje</a>
+      <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="siteNav" aria-label="Åpne meny">☰</button>
+      <nav id="siteNav" class="site-nav" role="navigation">
+        <ul>
+          <li><a href="om-meg.html">Hvem er jeg</a></li>
+          <li><a href="bilder.html">Bilder</a></li>
+          <li><a href="index.html#prosjekter">Prosjekter</a></li>
+          <li><a href="kontakt.html" aria-current="page">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <style>
+     #canvas {
+    width: 800px;
+    height: 200px;
+    background-color: transparent !important;   /* <— ekte blank canvas */
+    border: 2px solid #44444400;
+    margin-top: 20px;
+    display: flex;
+      max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+     }
+  main.container {
+  width: 500px
+}
+  
+  </style>
+
+  <main class="container">
+    <h1>Kontakt meg</h1>
+
+    <!-- BRED KONTAKTBOKS -->
+    <div class="contact-card">
+      <form class="form" action="https://formsubmit.co/ge_invest@me.com" method="POST">
+        <label for="email">E-post</label>
+        <input id="email" name="email" type="email" placeholder="din@epost.no" required>
+
+        <label for="navn">Navn</label>
+        <input id="navn" name="navn" type="text" placeholder="Ditt navn" required>
+
+        <label for="melding">Melding</label>
+        <textarea id="melding" name="melding" rows="6" placeholder="Skriv en kort melding…"></textarea>
+
+        <!-- Anti-spam & omdirigering -->
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="Ny melding fra porteføljen">
+        <input type="hidden" name="_next" value="index.html">
+
+        <button type="submit" class="button">Send</button>
+      </form>
+    </div>
+
+    <p class="small">
+      Eller send e-post:
+      <a href="mailto:elvinhiis8@gmail.com">din@epost.no</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container small">
+      <p>Laget av <i>Elvin.H.KJ</i> © <span id="year"></span></p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

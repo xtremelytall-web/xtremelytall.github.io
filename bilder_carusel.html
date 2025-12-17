@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nytt bildegalleri</title>
+  <link rel="stylesheet" href="./CSS/style.css">
+</head>
+<body class="bilder-ny-page">
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">Min portefølje</a>
+      <button class="nav-toggle" id="navToggle">☰</button>
+      <nav class="site-nav" id="siteNav">
+        <ul>
+          <li><a href="index.html">Hjem</a></li>
+          <li><a href="om-meg.html">Hvem er jeg</a></li>
+          <li><a href="prosjekter-tema.html">Prosjekter</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container gallery-wrapper">
+
+    <h1 class="page-title">Bildegalleri</h1>
+
+    <!-- Horisontalt galleri -->
+    <div class="carousel" id="carousel">
+      <img src="bilder/1.jpg" alt="Bilde 1" class="carousel-item">
+      <img src="bilder/2.jpg" alt="Bilde 2" class="carousel-item">
+      <img src="bilder/3.jpg" alt="Bilde 3" class="carousel-item">
+      <img src="bilder/bilde4.jpg" alt="Bilde 4" class="carousel-item">
+      <img src="bilder/bilde5.jpg" alt="Bilde 5" class="carousel-item">
+      <img src="bilder/1.jpg" alt="Bilde 1" class="carousel-item">
+      <img src="bilder/2.jpg" alt="Bilde 2" class="carousel-item">
+      <img src="bilder/3.jpg" alt="Bilde 3" class="carousel-item">
+      <img src="bilder/bilde4.jpg" alt="Bilde 4" class="carousel-item">
+      <img src="bilder/bilde5.jpg" alt="Bilde 5" class="carousel-item">
+      <img src="bilder/1.jpg" alt="Bilde 1" class="carousel-item">
+      <img src="bilder/2.jpg" alt="Bilde 2" class="carousel-item">
+      <img src="bilder/3.jpg" alt="Bilde 3" class="carousel-item">
+      <img src="bilder/bilde4.jpg" alt="Bilde 4" class="carousel-item">
+      <img src="bilder/bilde5.jpg" alt="Bilde 5" class="carousel-item">
+    </div>
+
+    <!-- Slider kontroller -->
+    <input type="range" min="0" max="100" value="0" class="carousel-slider" id="carouselSlider">
+
+  </main>
+
+  <!-- Popup-visning -->
+  <div class="lightbox" id="lightbox">
+    <img id="lightboxImg" src="" alt="Forstørret bilde">
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Laget av <i>Elvin.H.KJ</i> © 2025</p>
+    </div>
+  </footer>
+
+<script>
+// --- Enkel mobilmeny ---
+document.getElementById("navToggle").onclick = () => {
+  document.getElementById("siteNav").classList.toggle("open");
+};
+
+// --- Slider styrer scrollet ---
+const slider = document.getElementById("carouselSlider");
+const carousel = document.getElementById("carousel");
+
+slider.addEventListener("input", () => {
+  const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+  carousel.scrollLeft = (slider.value / 100) * maxScroll;
+});
+
+// --- Klikk på bilde for pop-up ---
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+
+carousel.querySelectorAll("img").forEach(img => {
+  img.addEventListener("click", () => {
+    lightboxImg.src = img.src;
+    lightbox.classList.add("show");
+  });
+});
+
+// ESC lukker popup
+window.addEventListener("keydown", e => {
+  if (e.key === "Escape") lightbox.classList.remove("show");
+});
+
+// Klikk utenfor bilde lukker popup
+lightbox.addEventListener("click", e => {
+  if (e.target === lightbox) lightbox.classList.remove("show");
+});
+</script>
+
+</body>
+</html>

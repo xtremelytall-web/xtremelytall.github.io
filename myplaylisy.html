@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>myplaylist</title>
+  <link rel="stylesheet" href="./CSS/style.css">
+</head>
+
+<body class="bilder-page">
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">Min portefølje</a>
+      <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="siteNav" aria-label="Åpne meny">☰</button>
+      <nav id="siteNav" class="site-nav" role="navigation">
+        <ul>
+          <li><a href="om-meg.html">Hvem er jeg</a></li>
+          <li><a href="bilder.html">Bilder</a></li>
+          <li><a href="myplaylist.html" aria-current="page">my playlist</a></li>
+          <li><a href="filmplakater.html">Filmplakater</a></li>
+          <li><a href="prosjekter-tema.html">Prosjekter</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<style>
+  #canvas {
+    width: 800px;
+    height: 200px;
+    background-color: transparent !important;   /* <— ekte blank canvas */
+    border: 2px solid #44444400;
+    margin-top: 20px;
+    display: flex;
+  }
+
+  input[type="file"] {
+    margin-top: 20px;
+  }
+
+  audio {
+    width: 400px;
+    border-radius: 10px;
+    border: 2px solid #000000;
+    background-color: #000000;
+  }
+
+  .custom-audio button {
+    background: #87494900;
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 10px 15px;
+    margin-right: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: 'Courier New', Courier, monospace;
+    align-items: center;
+    display: center;
+    
+  }
+
+  .custom-audio input[type=range] {
+    width: 200px;
+  }
+
+  .centerclass {
+    display: inline-block;
+    width: 801px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(0, 0, 0, 0); /* <— fjernet farget bakgrunn */
+    backdrop-filter: blur(5px);
+    border-radius: 1px;
+    padding: 2px;
+  }
+  .redtxtvolumknapp {
+font-family: 'Courier New', Courier, monospace;
+color: rgb(255, 255, 255);
+  }
+
+  /*playlist function*/
+  .playlist {
+    margin-top: 12px;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+  }
+  .playlist-item {
+    padding: 8px;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: inherit;
+    cursor: grab;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .playlist-item.active {
+    background: rgba(0, 255, 0, 0.16);
+    border-color: rgba(0,255,0,0.3);
+  }
+  .playlist-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 10px;
+    justify-content: center;
+  }
+  .toggle {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.068);
+    cursor: pointer;
+    background: transparent;
+  }
+  .toggle.active { /*toggle for shuffle å repeat*/
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .small-muted {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+</style>
+
+<div class="centerclass">
+  <h2>RGB audio visualizer V3 — Playlist Version2</h2>
+
+  <canvas id="canvas"></canvas>
+
+  <div class="stylediver">
+    <!-- MULTIPLE FILES -->
+    <input type="file" id="fileInput" accept="audio/*" multiple>
+
+    <!-- Autoplay første sang knapp greie -->
+    <label class="small-muted" style="display:flex;align-items:center;gap:6px;">
+      <input type="checkbox" id="autoplayFirst"> Autoplay første fil etter opplasting
+    </label>
+  </div>
+
+  <!-- Playlist med file name  -->
+
+  <audio id="audio" crossorigin="anonymous"></audio>
+
+  <div class="custom-audio" style="margin-top:10px;">
+    <div class="playlist-controls">
+      <button id="prevBtn" class="toggle" title="Forrige">⏮</button>
+      <button id="playBtn" class="toggle" title="Play">▶</button>
+      <button id="pauseBtn" class="toggle" title="Pause">⏸</button>
+      <button id="nextBtn" class="toggle" title="Neste">⏭</button>
+
+      <button id="shuffleBtn" class="toggle" title="Shuffle">shuffle</button>
+      <button id="repeatBtn" class="toggle" title="Repeat">repeat</button>
+
+      <label style="display:flex;align-items:center;gap:6px;margin-left:8px;">
+        <p class="redtxtvolumknapp">Volum</p>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" style="vertical-align:middle;">
+      </label>
+            <label style="display:flex;align-items:center;gap:6px;margin-left:8px;">
+        <p class="redtxtvolumknapp">opacity</p>
+        <input type="range" id="opacityslider" min="0" max="1" step="0.01" style="vertical-align:middle;">
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;align-items:center;justify-content:center;margin-top:8px;flex-wrap:wrap;">
+    <label style="margin-top:12px;">Color Temp</label>
+    <input type="range" id="tempSlider" min="-100" max="100" value="0" style="width:300px;">
+  </div>
+  <div id="playlist" class="playlist" aria-live="polite" style="margin-bottom:8px;"></div>
+
+
+  <div style="text-align:center;margin-top:8px;" class="small-muted">
+    <span id="nowPlaying">Ingen fil valgt</span>
+  </div>
+</div>
+
+<script>
+/* State */
+let playlist = [];           
+let currentIndex = -1;
+let audioContext = null;
+let analyzer = null;
+let sourceNode = null;
+let isShuffled = false;
+let repeatMode = 0; // 0 = no repeat, 1 = repeat all, 2 = repeat one
+let colorTemp = 0;
+let dragSrcIndex = null;
+
+/* Elementer fra html til java */
+const fileInput = document.getElementById('fileInput');
+const playlistDiv = document.getElementById('playlist');
+const audio = document.getElementById('audio');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const playBtn = document.getElementById('playBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const volumeSlider = document.getElementById('volumeSlider');
+const tempSlider = document.getElementById('tempSlider');
+const shuffleBtn = document.getElementById('shuffleBtn');
+const repeatBtn = document.getElementById('repeatBtn');
+const autoplayFirst = document.getElementById('autoplayFirst');
+const nowPlaying = document.getElementById('nowPlaying');
+const opacityslider = document.getElementById('opacityslider');
+
+
+function resizeCanvas() {
+  canvas.width = Math.max(300, Math.min(1200, canvas.clientWidth));
+  canvas.height = canvas.clientHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+
+function loadSettings() {
+  try {
+    const v = localStorage.getItem('mp_volume');
+    if (v !== null) {
+      volumeSlider.value = parseFloat(v);
+      audio.volume = parseFloat(v);
+    } else {
+      volumeSlider.value = 1;
+      audio.volume = 1;
+    }
+    isShuffled = localStorage.getItem('mp_shuffle') === '1';
+    updateToggleUI(shuffleBtn, isShuffled);
+    repeatMode = parseInt(localStorage.getItem('mp_repeat') || '0', 10);
+    updateRepeatUI();
+    autoplayFirst.checked = localStorage.getItem('mp_autoplay') === '1';
+  } catch (e) {
+    console.warn('Could not load settings', e);
+  }
+}
+loadSettings();
+
+
+function saveSettings() {
+  try {
+    localStorage.setItem('mp_volume', String(volumeSlider.value));
+    localStorage.setItem('mp_shuffle', isShuffled ? '1' : '0');
+    localStorage.setItem('mp_repeat', String(repeatMode));
+    localStorage.setItem('mp_autoplay', autoplayFirst.checked ? '1' : '0');
+  } catch (e) {
+    console.warn('Could not save settings', e);
+  }
+}
+
+
+function updateToggleUI(button, on) {
+  if (on) button.classList.add('active'); else button.classList.remove('active');
+}
+
+
+function updateRepeatUI() {
+  repeatBtn.classList.remove('active');
+  repeatBtn.title = 'Repeat: Ingen';
+  if (repeatMode === 1) {
+    repeatBtn.classList.add('active');
+    repeatBtn.title = 'Repeat: Alle';
+  } else if (repeatMode === 2) {
+    repeatBtn.classList.add('active');
+    repeatBtn.title = 'Repeat: Én (repeat one)';
+  }
+}
+
+
+async function ensureAudioContext() {
+  if (!audioContext) {
+    audioContext = new AudioContext();
+    analyzer = audioContext.createAnalyser();
+    analyzer.fftSize = 256;
+    
+    sourceNode = audioContext.createMediaElementSource(audio);
+    sourceNode.connect(analyzer);
+    analyzer.connect(audioContext.destination);
+  } else if (audioContext.state === 'suspended') {
+    try { await audioContext.resume(); } catch (e) {}
+  }
+}
+fileInput.addEventListener('change', (e) => {
+  const files = Array.from(e.target.files).filter(f => f && f.type.startsWith('audio'));
+  if (files.length === 0) return;
+
+  playlist = playlist.concat(files);
+  renderPlaylist();
+  
+  if (autoplayFirst.checked) {
+    const firstAddedIndex = playlist.length - files.length;
+    loadTrack(firstAddedIndex);
+  }
+});
+
+
+function renderPlaylist() {
+  playlistDiv.innerHTML = '';
+  playlist.forEach((file, index) => {
+    const item = document.createElement('div');
+    item.className = 'playlist-item' + (index === currentIndex ? ' active' : '');
+    item.setAttribute('draggable', 'true');
+    item.dataset.index = index;
+
+    
+    const nameWrap = document.createElement('div');
+    nameWrap.style.flex = '1';
+    nameWrap.textContent = file.name;
+    const controls = document.createElement('div');
+    controls.style.display = 'flex';
+    controls.style.gap = '6px';
+    controls.style.alignItems = 'center';
+
+    const playSmall = document.createElement('button');
+    playSmall.title = 'Spill denne';
+    playSmall.innerHTML = '▶';
+    playSmall.className = 'toggle';
+    playSmall.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      loadTrack(index);
+    });
+
+    const removeBtn = document.createElement('button');
+    removeBtn.title = 'Fjern';
+    removeBtn.innerHTML = 'X';
+    removeBtn.className = 'toggle';
+    removeBtn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      removeFromPlaylist(index);
+    });
+
+    controls.appendChild(playSmall);
+    controls.appendChild(removeBtn);
+
+    item.appendChild(nameWrap);
+    item.appendChild(controls);
+
+    item.addEventListener('click', () => loadTrack(index));
+
+    item.addEventListener('dragstart', (ev) => {
+      dragSrcIndex = index;
+      ev.dataTransfer.effectAllowed = 'move';
+      item.style.opacity = '0.4';
+    });
+    item.addEventListener('dragend', () => {
+      dragSrcIndex = null;
+      item.style.opacity = '';
+    });
+    item.addEventListener('dragover', (ev) => {
+      ev.preventDefault();
+      ev.dataTransfer.dropEffect = 'move';
+    });
+    item.addEventListener('drop', (ev) => {
+      ev.preventDefault();
+      const targetIndex = index;
+      if (dragSrcIndex === null || dragSrcIndex === targetIndex) return;
+      reorderPlaylist(dragSrcIndex, targetIndex);
+    });
+
+    playlistDiv.appendChild(item);
+  });
+
+  updateNowPlaying();
+}
+
+function removeFromPlaylist(index) {
+  const wasPlaying = index === currentIndex;
+  playlist.splice(index, 1);
+  if (index < currentIndex) {
+    currentIndex -= 1;
+  } else if (wasPlaying) {
+  
+    audio.pause();
+    audio.src = '';
+    currentIndex = -1;
+  }
+  renderPlaylist();
+}
+
+
+function reorderPlaylist(from, to) {
+  const item = playlist.splice(from, 1)[0];
+  playlist.splice(to, 0, item);
+
+  if (currentIndex === from) {
+    currentIndex = to;
+  } else if (from < currentIndex && to >= currentIndex) {
+    currentIndex -= 1;
+  } else if (from > currentIndex && to <= currentIndex) {
+    currentIndex += 1;
+  }
+  renderPlaylist();
+}
+
+async function loadTrack(index) {
+  if (!playlist[index]) return;
+  currentIndex = index;
+  const file = playlist[index];
+  const url = URL.createObjectURL(file);
+
+  audio.src = url;
+  audio.load();
+
+  await ensureAudioContext(); 
+  try {
+    await audio.play();
+  } catch (e) {
+    console.warn('Autoplay blocked or error calling play()', e);
+  }
+
+  renderPlaylist();
+}
+
+
+function playNext() {
+  if (playlist.length === 0) return;
+  if (repeatMode === 2) {
+    loadTrack(currentIndex === -1 ? 0 : currentIndex);
+    return;
+  }
+  if (isShuffled) {
+    let next = currentIndex;
+    if (playlist.length === 1) {
+      next = 0;
+    } else {
+      while (next === currentIndex) {
+        next = Math.floor(Math.random() * playlist.length);
+      }
+    }
+    loadTrack(next);
+    return;
+  }
+  const nextIndex = (currentIndex + 1);
+  if (nextIndex < playlist.length) {
+    loadTrack(nextIndex);
+  } else {
+    if (repeatMode === 1) {
+      loadTrack(0);
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  }
+}
+
+function playPrev() {
+  if (playlist.length === 0) return;
+  if (audio.currentTime > 3) {
+
+    audio.currentTime = 0;
+    return;
+  }
+  if (isShuffled) {
+    const prev = Math.floor(Math.random() * playlist.length);
+    loadTrack(prev);
+    return;
+  }
+  const prevIndex = currentIndex - 1;
+  if (prevIndex >= 0) {
+    loadTrack(prevIndex);
+  } else {
+    if (repeatMode === 1) {
+      loadTrack(playlist.length - 1);
+    } else {
+      audio.currentTime = 0;
+    }
+  }
+}
+
+
+playBtn.addEventListener('click', async () => {
+  await ensureAudioContext();
+  try { await audio.play(); } catch (e) { console.warn(e); }
+});
+pauseBtn.addEventListener('click', () => audio.pause());
+nextBtn.addEventListener('click', playNext);
+prevBtn.addEventListener('click', playPrev);
+
+shuffleBtn.addEventListener('click', () => {
+  isShuffled = !isShuffled;
+  updateToggleUI(shuffleBtn, isShuffled);
+  saveSettings();
+});
+
+repeatBtn.addEventListener('click', () => {
+  repeatMode = (repeatMode + 1) % 3; // 0 -> 1 -> 2 -> 0
+  updateRepeatUI();
+  saveSettings();
+});
+
+volumeSlider.addEventListener('input', (e) => {
+  audio.volume = e.target.value;
+  saveSettings();
+});
+
+/* color temp */
+tempSlider.addEventListener('input', () => {
+  colorTemp = parseInt(tempSlider.value, 10);
+});
+
+/* autoplayFirst checkbox save */
+autoplayFirst.addEventListener('change', () => saveSettings());
+
+
+function updateNowPlaying() {
+  if (currentIndex >= 0 && playlist[currentIndex]) {
+    nowPlaying.textContent = 'Spilles: ' + playlist[currentIndex].name;
+  } else {
+    nowPlaying.textContent = 'Ingen fil valgt';
+  }
+}
+
+
+audio.addEventListener('ended', () => {
+  playNext();
+  renderPlaylist();
+});
+
+
+function getReactiveColor(freqValue, index, totalBars) {
+  const low = freqValue;
+  const mid = Math.abs(Math.sin(index / totalBars * Math.PI)) * freqValue;
+  const high = (index / totalBars) * freqValue;
+
+  let r = low + 50;
+  let g = mid + 30;
+  let b = high + 10;
+
+  if (colorTemp < 0) {
+    r += Math.abs(colorTemp) * 1.5;
+    b -= Math.abs(colorTemp) * 1.2;
+  } else if (colorTemp > 0) {
+    b += colorTemp * 1.5;
+    r -= colorTemp * 1.2;
+  }
+
+  r = Math.max(0, Math.min(255, r));
+  g = Math.max(0, Math.min(255, g));
+  b = Math.max(0, Math.min(255, b));
+
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+let drawRequested = false;
+function visualize() {
+  if (!analyzer) return;
+  if (drawRequested) return; 
+  drawRequested = true;
+  const bufferLength = analyzer.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  function draw() {
+    if (!analyzer) {
+      drawRequested = false;
+      return;
+    }
+    requestAnimationFrame(draw);
+    analyzer.getByteFrequencyData(dataArray);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const barWidth = (canvas.width / bufferLength) * 2;
+    let x = 0;
+
+    for (let i = 0; i < bufferLength; i++) {
+      const barHeight = dataArray[i];
+      ctx.fillStyle = getReactiveColor(barHeight, i, bufferLength);
+      ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+      x += barWidth + 1;
+    }
+  }
+
+  draw();
+}
+
+audio.addEventListener('play', async () => {
+  await ensureAudioContext();
+  visualize();
+});
+
+updateToggleUI(shuffleBtn, isShuffled);
+updateRepeatUI();
+renderPlaylist();
+window.addEventListener('beforeunload', saveSettings);
+</script>
+
+<footer class="site-footer">
+  <div class="container small">
+    <p>Laget av <i>Elvin.H.KJ</i> © <span id="year"></span></p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Audio Visualizer (File Upload)</title>
+  <style>
+    body {
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    #canvas {
+      width: 800px;
+      height: 300px;
+      background: #000;
+      border: 2px solid #444;
+    }
+
+    input[type="file"] {
+      margin-top: 20px;
+    }
+
+    audio {
+      margin-top: 20px;
+      width: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Audio Visualizer (Upload File)</h2>
+  <h1>there is another version NOW!</h1>
+
+  <canvas id="canvas"></canvas>
+
+  <input type="file" id="fileInput" accept="audio/*">
+
+  <audio id="audio" controls></audio>
+  <li><a href="audio visualizerV3.html">audiovisualizerV3</a></li>
+
+  <script>
+    const audio = document.getElementById("audio");
+    const fileInput = document.getElementById("fileInput");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+
+    let audioContext, analyzer, source;
+
+    // Load uploaded file
+    fileInput.addEventListener("change", function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const url = URL.createObjectURL(file);
+      audio.src = url;
+      audio.load();
+    });
+
+    audio.onplay = () => {
+      if (!audioContext) {
+        audioContext = new AudioContext();
+        analyzer = audioContext.createAnalyser();
+
+        source = audioContext.createMediaElementSource(audio);
+        source.connect(analyzer);
+        analyzer.connect(audioContext.destination);
+
+        analyzer.fftSize = 256;
+      }
+
+      visualize();
+    };
+
+    function visualize() {
+      const bufferLength = analyzer.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      function draw() {
+        requestAnimationFrame(draw);
+
+        analyzer.getByteFrequencyData(dataArray);
+
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const barWidth = (canvas.width / bufferLength) * 2;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+          const barHeight = dataArray[i];
+          ctx.fillStyle = "rgb(" + (barHeight + 50) + ",50,200)";
+          ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+          x += barWidth + 1;
+        }
+      }
+
+      draw();
+    }
+  </script>
+
+</body>
+</html>

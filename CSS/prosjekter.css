@@ -1,0 +1,199 @@
+/* =========================================================
+   PROSJEKTER-TEMA.CSS — fullstendig isolert stil for prosjekter-tema.html
+   (erstatter styles.css for denne siden alene)
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   FARGER OG VARIABLER
+--------------------------------------------------------- */
+:root {
+  --bg: #0b0f14;
+  --surface: #121821;
+  --surface-2: #1a2330;
+  --text: #ffffff;
+  --muted: #c7c7c7;
+  --accent: #5cc8ff;
+  --accent-2: #8b5cf6;
+}
+
+/* ---------------------------------------------------------
+   GLOBALT
+--------------------------------------------------------- */
+body.projects-page {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ---------------------------------------------------------
+   HEADER + NAV
+--------------------------------------------------------- */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(6px);
+}
+
+.site-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 64px;
+}
+
+.brand {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.nav-toggle {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  color: var(--text);
+  display: none;
+  cursor: pointer;
+}
+
+.site-nav ul {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: .5rem .75rem;
+  border-radius: .5rem;
+  transition: .25s;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  background: rgba(255,255,255,0.12);
+  color: var(--text);
+}
+
+/* Mobilnav */
+@media(max-width:760px) {
+  .nav-toggle { display: block; }
+
+  .site-nav ul {
+    display: none;
+    flex-direction: column;
+    background: var(--surface-2);
+    padding: 1rem;
+    border-radius: .75rem;
+    border: 1px solid rgba(255,255,255,0.12);
+    position: absolute;
+    right: 1rem;
+    top: 4.2rem;
+  }
+
+  .site-nav.open ul { display: flex; }
+}
+
+/* ---------------------------------------------------------
+   SIDEHEADER
+--------------------------------------------------------- */
+.page-header {
+  padding: 2.5rem 0 1.5rem;
+  text-align: center;
+}
+
+.page-header h1 {
+  font-size: 2.4rem;
+  text-shadow: 0 0 12px rgba(0,0,0,0.5);
+}
+
+.page-header p {
+  color: var(--muted);
+  max-width: 700px;
+  margin: .5rem auto 0;
+}
+
+/* ---------------------------------------------------------
+   PROSJEKT-MENYER (DETAILS + SUMMARY)
+--------------------------------------------------------- */
+.project-menus {
+  margin: 2rem 0 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.project-menu {
+  background: var(--surface-2);
+  border-radius: 1rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  overflow: hidden;
+  transition: .25s;
+}
+
+.project-menu summary {
+  cursor: pointer;
+  padding: 1.2rem 1.5rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  background: rgba(255,255,255,0.05);
+  list-style: none;
+}
+
+.project-menu summary:hover {
+  background: rgba(255,255,255,0.10);
+}
+
+.project-menu[open] summary {
+  background: rgba(255,255,255,0.12);
+}
+
+.project-menu ul {
+  margin: 0;
+  padding: 1rem 2rem 1.5rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+.project-menu a {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 1.05rem;
+  transition: .25s;
+}
+
+.project-menu a:hover {
+  color: var(--accent-2);
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------
+   FOOTER
+--------------------------------------------------------- */
+.site-footer {
+  margin-top: auto;
+  padding: 1.5rem 0;
+  background: var(--surface);
+  text-align: center;
+  color: var(--muted);
+  border-top: 1px solid rgba(255,255,255,0.15);
+}

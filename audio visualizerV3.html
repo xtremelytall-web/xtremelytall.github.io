@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Reactive RGB Audio Visualizer</title>
+
+<style>
+  body {
+    background: #111111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-family: Arial;
+    padding-top: 20px;
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+  }
+
+  #canvas {
+    width: 800px;
+    height: 300px;
+    background: #00000000;
+    border: 2px solid #44444400;
+    margin-top: 20px;
+  }
+
+  input[type="file"] {
+    margin-top: 20px;
+  }
+
+  audio {
+  width: 400px;             /* change width */
+  border-radius: 10px;      /* rounded edges */
+  border: 2px solid #000000;   /* border color */
+  background-color: #000000;   /* background behind controls */
+}
+.custom-audio button {
+  background: #87494900;
+  color: rgb(255, 0, 0);
+  border: none;
+  padding: 10px 15px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  font-family: 'Courier New', Courier, monospace;
+}
+.custom-audio input[type=range] {
+  width: 200px;
+}
+</style>
+</head>
+
+<body>
+<h2>RGB audio visualizer V3</h2>
+
+<canvas id="canvas"></canvas>
+
+<input type="file" id="fileInput" accept="audio/*">
+
+<audio id="audio" src="audio.mp3">
+
+</audio>
+<div class="custom-audio">
+  <button id="playBtn">play</button>
+  <button id="pauseBtn">pause</button>
+  <input type="range" id="volumeSlider" min="0" max="1" step="0.01">
+</div>
+
+
+<label style="margin-top:20px;">Color Temp</label>
+<input type="range" id="tempSlider" min="-100" max="100" value="0" style="width:300px;">
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<figure><img src="63054-stop.png" alt="Mitt bilde 1"><figcaption></figcaption></figure>
+<h1>stop right there fool danger ahead!</h1>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<h1>if this tickled ur fancy check out my postfolio:</h1>
+<li><a href="index.html">My portfolio</a></li>
+<script>
+    let colorTemp = 0; 
+    const tempSlider = document.getElementById("tempSlider");
+tempSlider.addEventListener("input", () => {
+    colorTemp = parseInt(tempSlider.value);
+    
+});
+document.getElementById("playBtn").addEventListener("click", () => audio.play());
+document.getElementById("pauseBtn").addEventListener("click", () => audio.pause());
+document.getElementById("volumeSlider").addEventListener("input", (e) => audio.volume = e.target.value);
+  const audio = document.getElementById("audio");
+  const fileInput = document.getElementById("fileInput");
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+
+  let audioContext, analyzer, source;
+
+  // File upload
+  fileInput.addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const url = URL.createObjectURL(file);
+    audio.src = url;
+    audio.load();
+  });
+
+  audio.onplay = () => {
+    if (!audioContext) {
+      audioContext = new AudioContext();
+      analyzer = audioContext.createAnalyser();
+
+      source = audioContext.createMediaElementSource(audio);
+      source.connect(analyzer);
+      analyzer.connect(audioContext.destination);
+
+      analyzer.fftSize = 256;
+    }
+
+    visualize();
+  };
+
+  // REACTIVE COLOR FUNCTION
+function getReactiveColor(freqValue, index, totalBars) {
+    const low = freqValue;                                     
+    const mid = Math.abs(Math.sin(index / totalBars * Math.PI)) * freqValue;
+    const high = (index / totalBars) * freqValue;
+
+    let r = low + 50;
+    let g = mid + 30;
+    let b = high + 10;
+
+    
+    if (colorTemp < 0) {
+        // warm boost: more red, reduce blue
+        r += Math.abs(colorTemp) * 1.5;
+        b -= Math.abs(colorTemp) * 1.2;
+    } else if (colorTemp > 0) {
+        // cold boost: more blue, reduce red
+        b += colorTemp * 1.5;
+        r -= colorTemp * 1.2;
+    }
+
+    // Clamp 0–255
+    r = Math.max(0, Math.min(255, r));
+    g = Math.max(0, Math.min(255, g));
+    b = Math.max(0, Math.min(255, b));
+
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
+
+  function visualize() {
+    const bufferLength = analyzer.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    function draw() {
+      requestAnimationFrame(draw);
+
+      analyzer.getByteFrequencyData(dataArray);
+
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const barWidth = (canvas.width / bufferLength) * 2;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = dataArray[i];
+
+       
+        ctx.fillStyle = getReactiveColor(barHeight, i, bufferLength);
+
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+        x += barWidth + 1;
+      }
+    }
+
+    draw();
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,195 @@
+/* =========================================================
+   OM-MEG.CSS — fullstendig egen stil for om-meg.html
+   (ALLE nødvendige regler fra styles.css + egne justeringer)
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   FARGER OG VARIABLER
+--------------------------------------------------------- */
+:root {
+  --bg: #000000;
+  --surface: #121821;
+  --surface-2: #1a2330;
+  --text-light: #ffffff;
+  --text-dark: #000000;
+  --muted: #cccccc;
+  --accent: #5cc8ff;
+  --accent-2: #8b5cf6;
+}
+
+/* ---------------------------------------------------------
+   GLOBALT
+--------------------------------------------------------- */
+body.about-page {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text-light);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ---------------------------------------------------------
+   HEADER + NAV (fra styles.css, fullverdig)
+--------------------------------------------------------- */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 64px;
+}
+
+.brand {
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--text-light);
+}
+
+.site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: .5rem .75rem;
+  border-radius: .5rem;
+  transition: 0.25s;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  background: rgba(255,255,255,0.1);
+  color: var(--text-light);
+}
+
+/* ---------------------------------------------------------
+   MOBILMENY (fra styles.css)
+--------------------------------------------------------- */
+.nav-toggle {
+  display: none;
+  font-size: 1.6rem;
+  background: none;
+  color: var(--text-light);
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 780px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .site-nav ul {
+    display: none;
+    position: absolute;
+    right: 1rem;
+    top: 4.5rem;
+    background: var(--surface-2);
+    flex-direction: column;
+    padding: 1rem;
+    border-radius: .75rem;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .site-nav[open] ul {
+    display: flex;
+  }
+}
+
+/* ---------------------------------------------------------
+   GRID-LAYOUT FOR SIDEN
+--------------------------------------------------------- */
+.grid.two {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 2rem;
+  align-items: start;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+@media (max-width: 900px) {
+  .grid.two {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------------------------------------------------
+   TEKSTRAMMER (USYNLIGE, MEN MED SPACING)
+--------------------------------------------------------- */
+.text-block {
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* mulighet for sort tekst */
+.text-block.dark {
+  color: var(--text-dark);
+}
+
+/* typografi */
+.text-block h1,
+.text-block h2,
+.text-block p,
+.text-block li {
+  margin: .4rem 0;
+}
+
+/* ---------------------------------------------------------
+   BILDERAMME (HØYRE SIDE, SENTRERT)
+--------------------------------------------------------- */
+.panel.photo {
+  background: var(--surface);
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+  margin: auto;
+}
+
+.panel.photo img {
+  width: 100%;
+  max-width: 380px;
+  display: block;
+  border-radius: .75rem;
+}
+
+/* ---------------------------------------------------------
+   FOOTER (samme stil som resten av siden)
+--------------------------------------------------------- */
+.site-footer {
+  margin-top: auto;
+  background: var(--surface);
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding: 1.4rem 0;
+  text-align: center;
+  color: var(--muted);
+}

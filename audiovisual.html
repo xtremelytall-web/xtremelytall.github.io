@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <title>Audio Visual test for future portfolio</title>
+  <style>
+    body {
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    #canvas {
+      width: 800px;
+      height: 300px;
+      background: #000;
+      border: 2px solid #444;
+    }
+
+    audio {
+      margin-top: 20px;
+      width: 400px;
+    }
+
+    .fckme {
+        background-image: -webkit-radial-gradient(#ff0000);
+    }
+  </style>
+</head>
+
+<body class="bilder-page">
+  <h2 class="fckme">Audio Visual</h2>
+  <canvas id="canvas"></canvas>
+  <audio id="audio" controls>
+    <source src="13. Aria Math.mp3" type="audio/mpeg">
+  </audio>
+  <canvas id="canvas"></canvas>
+  <audio id="audio" controls>
+    <source src="Gasan_Bagirov_-_Autumn_Leaves_(mp3.pm).mp3" type="audio/mpeg">
+  </audio>
+
+
+  <script>
+    const audio = document.getElementById("audio");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+
+    let audioContext, analyzer, source;
+
+    audio.onplay = () => {
+      if (!audioContext) {
+        audioContext = new AudioContext();
+        analyzer = audioContext.createAnalyser();
+        source = audioContext.createMediaElementSource(audio);
+        source.connect(analyzer);
+        analyzer.connect(audioContext.destination);
+
+        analyzer.fftSize = 256;
+      }
+
+      visualize();
+    };
+
+    function visualize() {
+      const bufferLength = analyzer.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      function draw() {
+        requestAnimationFrame(draw);
+
+        analyzer.getByteFrequencyData(dataArray);
+
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const barWidth = (canvas.width / bufferLength) * 2;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+          const barHeight = dataArray[i];
+
+          ctx.fillStyle = "rgb(" + (barHeight + 50) + ",50,200)";
+          ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+          x += barWidth + 1;
+        }
+      }
+
+      draw();
+    }
+  </script>
+  <script src="soundbox.js"></script>
+</body>
+</html>

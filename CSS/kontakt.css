@@ -1,0 +1,244 @@
+/* =========================================================
+   KONTAKT.CSS — fullstendig isolert stil for kontakt.html
+   (erstatter styles.css helt for denne siden)
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   FARGER OG VARIABLER
+--------------------------------------------------------- */
+:root {
+  --bg: #0b0f14;
+  --surface: #121821;
+  --surface-2: #1a2330;
+  --text: #ffffff;
+  --muted: #d0d0d0;
+  --accent: #5cc8ff;
+  --accent-2: #8b5cf6;
+}
+
+/* ---------------------------------------------------------
+   GLOBALT
+--------------------------------------------------------- */
+body.contact-page {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  background: url("../bilder/contact-parallax.jpg") center/cover fixed no-repeat;
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  opacity: 0;
+  animation: fadeIn .8s ease forwards;
+}
+
+/* mørkt lag over bakgrunnen */
+body.contact-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: -1;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ---------------------------------------------------------
+   HEADER + NAV
+--------------------------------------------------------- */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 64px;
+}
+
+.brand {
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  color: var(--text);
+}
+
+.site-nav ul {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: .5rem .75rem;
+  border-radius: .5rem;
+  transition: .25s;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  color: var(--text);
+  background: rgba(255,255,255,0.12);
+}
+
+/* Mobilnav */
+@media(max-width:760px) {
+  .nav-toggle { display: block; }
+
+  .site-nav ul {
+    display: none;
+    flex-direction: column;
+    background: var(--surface-2);
+    padding: 1rem;
+    border-radius: .75rem;
+    border: 1px solid rgba(255,255,255,0.12);
+    position: absolute;
+    top: 4rem;
+    right: 1rem;
+    z-index: 15;
+  }
+
+  .site-nav.open ul { display: flex; }
+}
+
+/* ---------------------------------------------------------
+   KONTAKT SIDE – INNHOLD
+--------------------------------------------------------- */
+main.container {
+  flex: 1;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  text-align: center;
+}
+
+main h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+  text-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
+/* Kontakt-kort */
+.contact-card {
+  max-width: 1200px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 3.5rem 4rem;
+  background: rgba(255,255,255,0.08); /* glassmorphism */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.55);
+  text-align: left;
+  min-height: 480px;
+  animation: fadeInUp .9s ease;
+}
+
+/* Skjema */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form label {
+  font-weight: 600;
+}
+
+.form input,
+.form textarea {
+  width: 100%;
+  padding: 1rem 1.3rem;      /* Større felt */
+  border-radius: .75rem;     /* Litt rundere */
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  font-size: 1.1rem;         /* Større tekst */
+}
+
+.form input:focus,
+.form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(255,255,255,0.08);
+}
+
+/* Send-knapp */
+.button {
+  padding: .85rem 1.4rem;
+  border-radius: .75rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  transition: .25s;
+  box-shadow: 0 0 0 rgba(92,200,255,0.0);
+}
+
+.button:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 18px rgba(92,200,255,0.65); /* glow effekt */
+}
+
+.button:hover {
+  transform: scale(1.06);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+/* E-post nederst */
+.small {
+  margin-top: 2rem;
+  text-align: center;   /* alltid midtstilt under boksen */
+  width: 100%;
+  color: var(--muted);
+}
+
+.small a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* ---------------------------------------------------------
+   FOOTER
+--------------------------------------------------------- */
+.site-footer {
+  margin-top: auto;
+  background: var(--surface);
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding: 1.4rem 0;
+  text-align: center;
+  color: var(--muted);
+}
+/* ==== Fade-in animasjoner ==== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+

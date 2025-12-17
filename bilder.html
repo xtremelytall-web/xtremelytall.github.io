@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bilder</title>
+  <link rel="stylesheet" href="./CSS/style.css">
+</head>
+<body class="bilder-page">
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">Min portefølje</a>
+      <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="siteNav" aria-label="Åpne meny">☰</button>
+      <nav id="siteNav" class="site-nav" role="navigation">
+        <ul>
+          <li><a href="om-meg.html">Hvem er jeg</a></li>
+          <li><a href="bilder.html" aria-current="page">Bilder</a></li>
+          <li><a href="filmplakater.html">Filmplakater</a></li>
+          <li><a href="prosjekter-tema.html">Prosjekter</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <header class="page-header">
+      <h1>Responsiv bildegalleri</h1>
+      <p>Bytt ut bildene under med dine egne (legg dem i mappen <code>bilder/</code>).</p>
+    </header>
+
+    <section class="gallery">
+      <figure><img src="bilder/1.jpg" alt="Mitt bilde 1"><figcaption>Mitt bilde 1</figcaption></figure>
+      <figure><img src="bilder/2.jpg" alt="Mitt bilde 2"><figcaption>Mitt bilde 2</figcaption></figure>
+      <figure><img src="bilder/3.jpg" alt="Mitt bilde 3"><figcaption>Mitt bilde 3</figcaption></figure>
+      <figure><img src="bilder/4.jpg" alt="Mitt bilde 4"><figcaption>Mitt bilde 4</figcaption></figure>
+      <figure><img src="bilder/5.jpg" alt="Mitt bilde 5"><figcaption>Mitt bilde 5</figcaption></figure>
+      <figure><img src="bilder/6.jpg" alt="Mitt bilde 6"><figcaption>Mitt bilde 6</figcaption></figure>
+      <figure><img src="bilder/7.jpg" alt="Mitt bilde 7"><figcaption>Mitt bilde 7</figcaption></figure>
+      <figure><img src="bilder/8.jpg" alt="Mitt bilde 8"><figcaption>Mitt bilde 8</figcaption></figure>
+      <figure><img src="bilder/9.jpg" alt="Mitt bilde 9"><figcaption>Mitt bilde 9</figcaption></figure>
+      <figure><img src="bilder/10.jpg" alt="Mitt bilde 10"><figcaption>Mitt bilde 10</figcaption></figure>
+      <figure><img src="bilder/11.jpg" alt="Mitt bilde 11"><figcaption>Mitt bilde 11</figcaption></figure>
+      <figure><img src="bilder/12.jpg" alt="Mitt bilde 12"><figcaption>Mitt bilde 12</figcaption></figure>
+    </section>
+  </main>
+
+  <div id="lightbox" class="lightbox">
+  <img id="lightbox-img" src="">
+</div>
+
+
+  <footer class="site-footer">
+    <div class="container small">
+      <p>Laget av <i>Elvin.H.Kj</i> © <span id="year"></span></p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
